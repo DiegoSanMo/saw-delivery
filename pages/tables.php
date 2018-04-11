@@ -2,7 +2,10 @@
   
   $host_db="localhost";
   $usuario_db="root";
-  $pass_db="Bankai123";
+  //Contrasenia Karin
+  //$pass_db="Bankai123";
+  //Contrasenia Diego
+  $pass_db="root";
   $db="saw";
 
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);
@@ -147,16 +150,63 @@
                                 ?>	
 
                                     <tr class="odd gradeX">
-                                        <td><?php echo $row['id']; ?></td>
+                                        <td id="idSale"><?php echo $row['id']; ?></td>
                                         <td><?php echo $row['date']; ?></td>
                                         <td><?php echo $row['total']; ?></td>
                                         <td class="center"><?php echo $clientRow['address']; ?></td>
-                                        <td class="text-center"><a href="" class="btn btn-info">Ver venta</a></td>
+                                        <td class="text-center"><a href="" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter">Ver venta</a></td>
                                         <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>
                             </table>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle"><h2 class="text-center">Detalle de venta</h2></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Producto</th>
+                                            <th scope="col">Cantidad</th>
+                                            <th scope="col">Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <script> idSale = document.getElementById("idSale").value </script>
+                                        <?php
+                                            $variablePHP = idSale;
+                                            //echo "idSale = ".$variablePHP;
+                                            foreach ($conexion->query("SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` WHERE idSale= ".$variablePHP.";") as $row){    
+
+                                            //$valores = "SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` WHERE idSale= ".$variablePHP.";";
+                                            //$lector = mysqli_query($conexion, $valores);
+                                            //$salesDetailsRow = mysqli_fetch_array($lector);
+
+                                        ?>
+                                        <tr>
+                                            <th scope="row"><?php echo $row['name']; ?></th>
+                                            <td><?php echo $row['quantity']; ?></td>
+                                            <td><?php echo $row['price']; ?></td>
+                                        </tr>
+                                            <?php } ?>
+                                    </tbody>
+                                </table>    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
                         </div>
                         <!-- /.panel-body -->
                     </div>
