@@ -1,3 +1,28 @@
+<?php
+  
+  $host_db="localhost";
+  $usuario_db="root";
+  $pass_db="Bankai123";
+  $db="saw";
+
+  $conexion=new mysqli($host_db,$usuario_db, $pass_db);
+  $conexion->set_charset("utf8");    
+  mysqli_select_db($conexion, "saw");  
+
+  session_start();
+  $nombre = $_SESSION['username'];
+  $id = $_SESSION['userId'];
+
+  $valores = "SELECT COUNT(*) from sales WHERE `status` = 0";
+  $lector = mysqli_query($conexion, $valores);
+  $shoppingCartRow = mysqli_fetch_array($lector);
+
+  $valores = "SELECT COUNT(*) from delivery_order WHERE idDeliveryMan = $id";
+  $lectore = mysqli_query($conexion, $valores);
+  $saleRow = mysqli_fetch_array($lectore);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,17 +79,13 @@
 
             <ul class="nav navbar-top-links navbar-right">                
                 <!-- /.dropdown -->
+                <li><?php echo $nombre; ?></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <ul class="dropdown-menu dropdown-user">                        
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -102,12 +123,12 @@
                                     <i class="fa fa-shopping-cart fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">124</div>
+                                    <div class="huge"><?php echo $shoppingCartRow[0]; ?></div>
                                     <div>Pedidos pendientes!</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="tables.php">
                             <div class="panel-footer">
                                 <span class="pull-left">Ver pedidos</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -124,7 +145,7 @@
                                     <i class="fa fa-support fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
+                                <div class="huge"><?php echo $saleRow[0]; ?></div>
                                     <div>Pedidos entregados!</div>
                                 </div>
                             </div>
@@ -149,55 +170,42 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                                </a>
-                            </div>
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Número de venta</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Dirección</th>
+                                        <th>Ver venta</th>
+                                        <th>Generar entrega de pedido</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                  foreach ($conexion->query('SELECT * from sales WHERE `status` = 0  ORDER BY id ASC LIMIT 0,6;') as $row){    
+                                    $valores = "SELECT * from shopping_cart WHERE id = ".$row['idShoppingCart'].";";
+                                    $lector = mysqli_query($conexion, $valores);
+                                    $shoppingCartRow = mysqli_fetch_array($lector);
+
+                                    $valores = "SELECT * from clients WHERE id = ".$shoppingCartRow['idClient'].";";
+                                    $lectore = mysqli_query($conexion, $valores);
+                                    $clientRow = mysqli_fetch_array($lectore);
+                                ?>	
+
+                                    <tr class="odd gradeX">
+                                        <td><?php echo $row['id']; ?></td>
+                                        <td><?php echo $row['date']; ?></td>
+                                        <td><?php echo $row['total']; ?></td>
+                                        <td class="center"><?php echo $clientRow['address']; ?></td>
+                                        <td class="text-center"><a href="" class="btn btn-info">Ver venta</a></td>
+                                        <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                            </table>
                             <!-- /.list-group -->
-                            <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                            <a href="tables.php" class="btn btn-default btn-block">Ver todos los pedidos</a>
                         </div>
                         <!-- /.panel-body -->
                     </div>

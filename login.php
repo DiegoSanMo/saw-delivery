@@ -13,14 +13,18 @@
     mysqli_select_db($conexion, "saw");
     if(@$_POST['name']){
         $nombre = $_POST['name'];
-        $contrasenia = $_POST['pass'];   
+        $contrasenia = $_POST['pass'];      
+        
         
         $consultaSQL= "SELECT * FROM `delivery_man` WHERE `name` ='".$nombre."' AND `password` = '".$contrasenia."';";
         $resultados=mysqli_query($conexion, $consultaSQL);
         $row = mysqli_fetch_array($resultados);
         if($row['name'] == $nombre){
+          session_start();
+          $_SESSION['username']  = $nombre;
+          $_SESSION['userId']  = $row['id'];
             echo "<script>alert('usuario regristrado')</script>";
-            echo "<script>window.history.pushState('', '', 'index.php');</script>";
+            echo "<script>window.history.pushState('', '', 'index.html');</script>";
             echo "<script>location.reload();</script>";
             //session_start(); //Star session
         }
