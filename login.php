@@ -20,7 +20,7 @@
         $row = mysqli_fetch_array($resultados);
         if($row['name'] == $nombre){
             echo "<script>alert('usuario regristrado')</script>";
-            echo "<script>window.history.pushState('', '', 'index.html');</script>";
+            echo "<script>window.history.pushState('', '', 'index.php');</script>";
             echo "<script>location.reload();</script>";
             //session_start(); //Star session
         }
