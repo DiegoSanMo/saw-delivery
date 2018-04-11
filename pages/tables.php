@@ -11,6 +11,10 @@
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);
   $conexion->set_charset("utf8");    
   mysqli_select_db($conexion, "saw");  
+
+  session_start();
+  $nombre = $_SESSION['username'];
+  $id = $_SESSION['userId'];
 ?>
 
 
@@ -75,17 +79,13 @@
 
             <ul class="nav navbar-top-links navbar-right">                
                 <!-- /.dropdown -->
+                <li><?php echo $nombre; ?></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -112,8 +112,8 @@
 
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Tables</h1>
+                <div class="col-lg-12 text-center">
+                    <h1 class="page-header">Consulta de pedidos a entregar</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
