@@ -10,14 +10,20 @@
   mysqli_select_db($conexion, "saw");  
 
   session_start();
+  if(@$_SESSION['username']){
   $nombre = $_SESSION['username'];
   $idUser = $_SESSION['userId'];
 
   $id = $_GET['id'];
-  if($_GET['idSave']){
+  if(@$_GET['idSave']){
     $idSave = $_GET['idSave'];
+    date_default_timezone_set('America/Monterrey');
+    $date = date('Y-m-d', time());
     
-    $consulta="INSERT INTO `delivery_order` (`idSale`, `idDeliveryMan`, `date`) VALUES(".$idSave.",".$idUser.", '01-01-2018');";
+    $consulta="INSERT INTO `delivery_order` (`idSale`, `idDeliveryMan`, `date`) VALUES(".$idSave.",".$idUser.",'".$date."');";
+    $resultados=mysqli_query($conexion,$consulta);
+
+    $consulta="UPDATE `sales` SET `status` = 1 WHERE id = ".$idSave.";";
     $resultados=mysqli_query($conexion,$consulta);
     echo "<script>window.history.pushState('', '', 'index.php');</script>";  
     echo "<script>location.reload();</script>"; 
@@ -93,7 +99,7 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
+                        <li><a href="../login.php"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -122,7 +128,8 @@
             <div class="row">
                 <div class="col-lg-12">
                   <br>
-                    <?php $valores = "SELECT * from sales WHERE id = ".$id.";";
+                    <?php       
+                    $valores = "SELECT * from sales WHERE id = ".$id.";";
                     $lecto = mysqli_query($conexion, $valores);
                     $saleRow = mysqli_fetch_array($lecto);
 
@@ -137,19 +144,19 @@
                   <div class="row">
                     <div class="col-md-2">
                       <label for="">No. Pedido:</label>
-                      <input type="text" class="form-control" value="<?php echo $id; ?>">
+                      <input type="text" readonly="" class="form-control" value="<?php echo $id; ?>">
                     </div>
                     <div class="col-md-2">
                       <label for="">Fecha:</label>
-                      <input type="text" class="form-control" value="<?php echo $saleRow['date']; ?>">
+                      <input type="text" readonly="" class="form-control" value="<?php echo $saleRow['date']; ?>">
                     </div>
                     <div class="col-md-4">
                       <label for="">Cliente:</label>
-                      <input type="text" class="form-control" value="<?php echo $clientRow['username']; ?>">
+                      <input type="text" readonly="" class="form-control" value="<?php echo $clientRow['username']; ?>">
                     </div>
                     <div class="col-md-4">
                       <label for="">Dirección:</label>
-                      <input type="text" class="form-control" value="<?php echo $clientRow['address']; ?>">
+                      <input type="text" readonly="" class="form-control" value="<?php echo $clientRow['address']; ?>">
                     </div>
                   </div>
                   <br>
@@ -211,6 +218,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
                 <div class="col-md-9 text-center">   
+                  <br>
                   <br>
                   <br>               
                   <a href='sale.php?idSave=<?php echo $id;?>' class="btn btn-primary btn-lg">Pedido finalizado</a>
@@ -308,3 +316,10 @@
 </body>
 
 </html>
+
+<?php } 
+else {
+  echo "<script>window.history.pushState('', '', '../login.php');</script>";  
+  echo "<script>location.reload();</script>"; 
+}
+  ?>

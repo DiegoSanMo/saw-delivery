@@ -11,6 +11,8 @@
     $conexion->set_charset("utf8");    
 
     mysqli_select_db($conexion, "saw");
+    session_start();
+    session_destroy(); 
     if(@$_POST['name']){
         $nombre = $_POST['name'];
         $contrasenia = $_POST['pass'];      
@@ -23,7 +25,6 @@
           session_start();
           $_SESSION['username']  = $nombre;
           $_SESSION['userId']  = $row['id'];
-            echo "<script>alert('usuario regristrado')</script>";
             echo "<script>window.history.pushState('', '', 'index.html');</script>";
             echo "<script>location.reload();</script>";
             //session_start(); //Star session
