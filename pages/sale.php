@@ -14,6 +14,15 @@
   $idUser = $_SESSION['userId'];
 
   $id = $_GET['id'];
+  if($_GET['idSave']){
+    $idSave = $_GET['idSave'];
+    
+    $consulta="INSERT INTO `delivery_order` (`idSale`, `idDeliveryMan`, `date`) VALUES(".$idSave.",".$idUser.", '01-01-2018');";
+    $resultados=mysqli_query($conexion,$consulta);
+    echo "<script>window.history.pushState('', '', 'index.php');</script>";  
+    echo "<script>location.reload();</script>"; 
+
+  }
 ?>
 
 
@@ -112,13 +121,47 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
+                  <br>
+                    <?php $valores = "SELECT * from sales WHERE id = ".$id.";";
+                    $lecto = mysqli_query($conexion, $valores);
+                    $saleRow = mysqli_fetch_array($lecto);
+
+                    $valores = "SELECT * from shopping_cart WHERE id = ".$id.";";
+                    $lector = mysqli_query($conexion, $valores);
+                    $shoppingCartRow = mysqli_fetch_array($lector);
+
+                    $valores = "SELECT * from clients WHERE id = ".$shoppingCartRow['idClient'].";";
+                    $lectore = mysqli_query($conexion, $valores);
+                    $clientRow = mysqli_fetch_array($lectore);
+                  ?>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <label for="">No. Pedido:</label>
+                      <input type="text" class="form-control" value="<?php echo $id; ?>">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="">Fecha:</label>
+                      <input type="text" class="form-control" value="<?php echo $saleRow['date']; ?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="">Cliente:</label>
+                      <input type="text" class="form-control" value="<?php echo $clientRow['username']; ?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="">Dirección:</label>
+                      <input type="text" class="form-control" value="<?php echo $clientRow['address']; ?>">
+                    </div>
+                  </div>
+                  <br>
+                </div>
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            DataTables Advanced Tables
+                            Productos de la venta
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -127,22 +170,19 @@
                                     <th>Cantidad</th>
                                     <th>Total</th>
                                 </tr>
-                            </thead>                          
-                          
+                            </thead>      
                             <tbody>
-
                               <?php
-                              $total = 0;
+                                $total = 0;
                                 foreach ($conexion->query('SELECT * from sales_details WHERE idSale = '.$id.';') as $row){    
                                   $valores = "SELECT * from products WHERE id = ".$row['idProduct'].";";
                                   $lectore = mysqli_query($conexion, $valores);
                                   $productRow = mysqli_fetch_array($lectore);
-                                  
                               ?>	
                   
                               <tr class="odd gradeX">
                                 <td class="">
-                                  <div class="cart-img-product b-rad-4 o-f-hidden">
+                                  <div class="cart-img-product b-rad-4 o-f-hidden text-center">
                                   <?php echo "<img src='../../saw-admin/images/products/".$productRow['image']."' style='width:100px' alt='100px'>";?> 
                                   </div>
                                 </td>
@@ -156,15 +196,13 @@
 
                                 <td class="">
                                   <?php echo $row['quantity']; ?>
-
                                   <?php $total = $total + $row['price'] * $row['quantity']; ?> 
                                 </td>                                
 
                                 <td class="">$<?php echo $row['price'] * $row['quantity'];?></td>
                               </tr>
                               <?php } ?>                            
-                            </tbody>                           
-                                                        
+                            </tbody>                     
                           </table>
                         </div>
                         <!-- /.panel-body -->
@@ -172,14 +210,64 @@
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-12 -->
-            </div>
+                <div class="col-md-9 text-center">   
+                  <br>
+                  <br>               
+                  <a href='sale.php?idSave=<?php echo $id;?>' class="btn btn-primary btn-lg">Pedido finalizado</a>
+                </div>
+                <div class="col-md-3" style="border: solid 1px lightgray; border-radius: 5px;">
+                  <h3 class="">
+                    Cuenta del pedido
+                  </h3>
+
+                  <hr>
+
+                  <!--  -->
+                  <div class="">
+                    <h4>
+                      <span class=""> 
+                        Subtotal:
+                      </span>
+
+                      <span class="">
+                        $<?php echo $total * .84;?>	
+                      </span>
+                    </h4>                    
+                  </div>
+
+                  <div class="">
+                    <h4>
+                      <span class="">
+                        IVA:
+                      </span>
+
+                      <span class="">
+                        $<?php echo $total * .16;?>	
+                      </span>
+                    </h4>                    
+                  </div>
+
+                  <hr>
+
+                  <!--  -->
+                  <div class="">
+                    <h3>
+                      <span class="">
+                        Total:
+                      </span>
+
+                      <span class="">
+                        $<?php echo $total;?>	
+                      </span>
+                    </h3>                    
+                  </div>
+                </div>
 
 
-
-          
+            </div>          
         </div>
 
-       
+       <br>
 
         
 
