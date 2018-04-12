@@ -185,11 +185,12 @@
                                         <?php
                                             $variablePHP = idSale;
                                             //echo "idSale = ".$variablePHP;
-                                            foreach ($conexion->query("SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` WHERE idSale= ".$variablePHP.";") as $row){    
+                                            foreach ($conexion->query("SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` ON products.id = sales_details.idProduct WHERE idSale= ".$variablePHP.";") as $row){    
 
                                             //$valores = "SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` WHERE idSale= ".$variablePHP.";";
                                             //$lector = mysqli_query($conexion, $valores);
                                             //$salesDetailsRow = mysqli_fetch_array($lector);
+                                            $total = $total + $row['price'];
 
                                         ?>
                                         <tr>
@@ -200,6 +201,7 @@
                                             <?php } ?>
                                     </tbody>
                                 </table>    
+                                <div class="text-center">Total de venta: $<strong> <?php echo "$total" ?></strong></div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
