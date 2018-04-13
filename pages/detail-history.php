@@ -223,7 +223,7 @@
                           </table>
                           <div class="text-center">
                           <h4>Total $ <strong><?php echo $summary?></strong></h4>
-                          <td class='text-center'><a href='tables.php' class='btn btn-success'>Regresar</a></td>
+                          <td class='text-center'><a href='sales-history.php' class='btn btn-success'>Regresar</a></td>
                           </div>
                         </div>
                         <!-- /.panel-body -->
