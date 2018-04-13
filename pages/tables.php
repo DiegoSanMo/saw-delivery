@@ -32,7 +32,7 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -138,26 +138,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                  foreach ($conexion->query('SELECT * from sales WHERE `status` = 0 ;') as $row){    
-                                    $valores = "SELECT * from shopping_cart WHERE id = ".$row['idShoppingCart'].";";
-                                    $lector = mysqli_query($conexion, $valores);
-                                    $shoppingCartRow = mysqli_fetch_array($lector);
+                                    <?php
+                                    foreach ($conexion->query('SELECT * from sales WHERE `status` = 0 ;') as $row){    
+                                        $valores = "SELECT * from shopping_cart WHERE id = ".$row['idShoppingCart'].";";
+                                        $lector = mysqli_query($conexion, $valores);
+                                        $shoppingCartRow = mysqli_fetch_array($lector);
 
-                                    $valores = "SELECT * from clients WHERE id = ".$shoppingCartRow['idClient'].";";
-                                    $lectore = mysqli_query($conexion, $valores);
-                                    $clientRow = mysqli_fetch_array($lectore);
-                                ?>	
+                                        $valores = "SELECT * from clients WHERE id = ".$shoppingCartRow['idClient'].";";
+                                        $lectore = mysqli_query($conexion, $valores);
+                                        $clientRow = mysqli_fetch_array($lectore);
+                                    ?>	
 
-                                    <tr class="odd gradeX">
-                                        <td id="idSale"><?php echo $row['id']; ?></td>
-                                        <td><?php echo $row['date']; ?></td>
-                                        <td><?php echo $row['total']; ?></td>
-                                        <td class="center"><?php echo $clientRow['address']; ?></td>
-                                        <td class="text-center"><a href="" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter">Ver venta</a></td>
-                                        <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
-                                    </tr>
-                                <?php } ?>
+                                        <tr class="odd gradeX">
+                                            <td id="id"><?php echo $row['id']; ?></td>
+                                            <td><?php echo $row['date']; ?></td>
+                                            <td><?php echo $row['total']; ?></td>
+                                            <td class="center"><?php echo $clientRow['address']; ?></td>
+                                            <td class="text-center"><a href="" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="idSale">Ver venta</a></td>
+                                            <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success' name='buttons'>Generar entrega</a></td>
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
 
@@ -181,15 +181,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <script> idSale = document.getElementById("idSale").value </script>
+                                        <!-- <script> 
+                                            var final;
+                                            $('.btn-info').each(function(){
+                                                var id = $(this).parent().parent().find('#id').html();      
+                                                    $(this).on('click', function(){       
+                                                        console.log(id)  
+                                                        final = id
+                                                        
+                                                    });
+                                            });
+                                        </script> -->
                                         <?php
-                                            $variablePHP = idSale;
-                                            //echo "idSale = ".$variablePHP;
+                                            $variablePHP;
+                                            echo $variablePHP;
                                             foreach ($conexion->query("SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` ON products.id = sales_details.idProduct WHERE idSale= ".$variablePHP.";") as $row){    
-
-                                            //$valores = "SELECT `idSale`, `name`, `quantity`, `price` FROM `sales_details` INNER JOIN `products` WHERE idSale= ".$variablePHP.";";
-                                            //$lector = mysqli_query($conexion, $valores);
-                                            //$salesDetailsRow = mysqli_fetch_array($lector);
                                             $total = $total + $row['price'];
 
                                         ?>
