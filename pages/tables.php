@@ -155,8 +155,8 @@
                                             <td><?php echo $row['date']; ?></td>
                                             <td><?php echo $row['total']; ?></td>
                                             <td class="center"><?php echo $clientRow['address']; ?></td>
-                                            <td class="text-center"><a href="" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" id="idSale">Ver venta</a></td>
-                                            <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success' name='buttons'>Generar entrega</a></td>
+                                            <td class="text-center"><a href='detail.php?id=<?php echo $row['id'];?>' class="btn btn-info" id="idSale">Ver venta</a></td>
+                                            <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
@@ -182,17 +182,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- <script> 
-                                            var final;
-                                            $('.btn-info').each(function(){
-                                                var id = $(this).parent().parent().find('#id').html();      
-                                                    $(this).on('click', function(){       
-                                                        console.log(id)  
-                                                        final = id
-                                                        
-                                                    });
-                                            });
-                                        </script> -->
                                         <?php
                                             $variablePHP;
                                             echo $variablePHP;
@@ -258,7 +247,6 @@
 </body>
 
 </html>
-
 <?php } 
 else {
   echo "<script>window.history.pushState('', '', '../login.php');</script>";  
