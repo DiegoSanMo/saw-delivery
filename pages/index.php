@@ -10,6 +10,7 @@
   mysqli_select_db($conexion, "saw");  
 
   session_start();
+  if(@$_SESSION['username']){
   $nombre = $_SESSION['username'];
   $id = $_SESSION['userId'];
 
@@ -85,7 +86,7 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">                        
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> salir</a>
+                        <li><a href="../login.php"><i class="fa fa-sign-out fa-fw"></i> salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -105,14 +106,13 @@
                         </li>     
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
         </nav>
 
         <div id="page-wrapper">
             <!-- /.row -->
-            <br><br>
+            <br>
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-lg-5 col-md-5">
@@ -183,7 +183,7 @@
                                 </thead>
                                 <tbody>
                                 <?php
-                                  foreach ($conexion->query('SELECT * from sales WHERE `status` = 0  ORDER BY id ASC LIMIT 0,6;') as $row){    
+                                  foreach ($conexion->query('SELECT * from sales WHERE `status` = 0  ORDER BY id ASC LIMIT 0,7;') as $row){    
                                     $valores = "SELECT * from shopping_cart WHERE id = ".$row['idShoppingCart'].";";
                                     $lector = mysqli_query($conexion, $valores);
                                     $shoppingCartRow = mysqli_fetch_array($lector);
@@ -205,7 +205,7 @@
                                 </tbody>
                             </table>
                             <!-- /.list-group -->
-                            <a href="tables.php" class="btn btn-default btn-block">Ver todos los pedidos</a>
+                            <!-- <a href="tables.php" class="btn btn-default btn-block">Ver todos los pedidos</a> -->
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -240,3 +240,9 @@
 </body>
 
 </html>
+
+<?php } 
+else {
+  echo "<script>window.history.pushState('', '', '../login.php');</script>";  
+  echo "<script>location.reload();</script>"; 
+}?>

@@ -13,6 +13,7 @@
   mysqli_select_db($conexion, "saw");  
 
   session_start();
+  if(@$_SESSION['username']){
   $nombre = $_SESSION['username'];
   $id = $_SESSION['userId'];
 ?>
@@ -85,7 +86,7 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
+                        <li><a href="../login.php"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -257,3 +258,9 @@
 </body>
 
 </html>
+
+<?php } 
+else {
+  echo "<script>window.history.pushState('', '', '../login.php');</script>";  
+  echo "<script>location.reload();</script>"; 
+}?>
