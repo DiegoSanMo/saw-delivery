@@ -2,7 +2,7 @@
   
   $host_db="localhost";
   $usuario_db="root";
-  $pass_db="root";
+  $pass_db="Bankai123";
   $db="saw";
 
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);

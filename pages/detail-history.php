@@ -2,7 +2,7 @@
   
   $host_db="localhost";
   $usuario_db="root";
-  $pass_db="root";
+  $pass_db="Bankai123";
   $db="saw";
 
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);
@@ -187,6 +187,7 @@
                             <tbody>
                               <?php
                                 $total = 0;
+                                $summary = 0;
                                 foreach ($conexion->query('SELECT * from sales_details WHERE idSale = '.$id.';') as $row){    
                                   $valores = "SELECT * from products WHERE id = ".$row['idProduct'].";";
                                   $lectore = mysqli_query($conexion, $valores);

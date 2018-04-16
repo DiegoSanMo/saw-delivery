@@ -3,9 +3,9 @@
   $host_db="localhost";
   $usuario_db="root";
   //Contrasenia Karin
-  //$pass_db="Bankai123";
+  $pass_db="Bankai123";
   //Contrasenia Diego
-  $pass_db="root";
+  //$pass_db="root";
   $db="saw";
 
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);
@@ -16,7 +16,6 @@
   if(@$_SESSION['username']){
   $nombre = $_SESSION['username'];
   $id = $_SESSION['userId'];
-  echo $page_referer ; 
   
 ?>
 
@@ -152,7 +151,7 @@
                                             <td><?php echo $row['date']; ?></td>
                                             <td><?php echo $salesRow['total']?></td>
                                             <td class="center"><?php echo $salesRow['address']; ?></td>
-                                            <td class="text-center"><a href='detail-history.php?id=<?php echo $row['id']; ?>' class="btn btn-info" id="idSale">Ver detalles</a></td>
+                                            <td class="text-center"><a href='detail-history.php?id=<?php echo $row['idSale']; ?>' class="btn btn-info" id="idSale">Ver detalles</a></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
