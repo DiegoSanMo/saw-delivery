@@ -2,7 +2,7 @@
   
   $host_db="localhost";
   $usuario_db="root";
-  $pass_db="Bankai123";
+  $pass_db="root";
   $db="saw";
 
   $conexion=new mysqli($host_db,$usuario_db, $pass_db);
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="sales-history.php">
                             <div class="panel-footer">
                                 <span class="pull-left">Ver pedidos</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -198,7 +198,7 @@
                                         <td><?php echo $row['date']; ?></td>
                                         <td><?php echo $row['total']; ?></td>
                                         <td class="center"><?php echo $clientRow['address']; ?></td>
-                                        <td class="text-center"><a href="" class="btn btn-info">Ver venta</a></td>
+                                        <td class="text-center"><a href='detail.php?id=<?php echo $row['id'];?>' class="btn btn-info">Ver venta</a></td>
                                         <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
                                     </tr>
                                 <?php } ?>

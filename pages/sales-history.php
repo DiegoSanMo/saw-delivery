@@ -2,6 +2,9 @@
   
   $host_db="localhost";
   $usuario_db="root";
+  //Contrasenia Karin
+  //$pass_db="Bankai123";
+  //Contrasenia Diego
   $pass_db="root";
   $db="saw";
 
@@ -13,6 +16,8 @@
   if(@$_SESSION['username']){
   $nombre = $_SESSION['username'];
   $id = $_SESSION['userId'];
+  echo $page_referer ; 
+  
 ?>
 
 
@@ -30,7 +35,7 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -111,7 +116,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h1 class="page-header">Consulta de pedidos a entregar</h1>
+                    <h1 class="page-header">Historial de pedidos entregados</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -120,7 +125,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            DataTables Advanced Tables
+                            Entregas de <strong><?php echo $nombre?></strong>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -131,31 +136,25 @@
                                         <th>Fecha</th>
                                         <th>Total</th>
                                         <th>Dirección</th>
-                                        <th>Ver venta</th>
-                                        <th>Generar entrega de pedido</th>
+                                        <th>Detalles de venta</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                  foreach ($conexion->query('SELECT * from sales WHERE `status` = 0 ;') as $row){    
-                                    $valores = "SELECT * from shopping_cart WHERE id = ".$row['idShoppingCart'].";";
-                                    $lector = mysqli_query($conexion, $valores);
-                                    $shoppingCartRow = mysqli_fetch_array($lector);
-
-                                    $valores = "SELECT * from clients WHERE id = ".$shoppingCartRow['idClient'].";";
-                                    $lectore = mysqli_query($conexion, $valores);
-                                    $clientRow = mysqli_fetch_array($lectore);
-                                ?>	
-
-                                    <tr class="odd gradeX">
-                                        <td><?php echo $row['id']; ?></td>
-                                        <td><?php echo $row['date']; ?></td>
-                                        <td><?php echo $row['total']; ?></td>
-                                        <td class="center"><?php echo $clientRow['address']; ?></td>
-                                        <td class="text-center"><a href='detail.php?id=<?php echo $row['id'];?>' class="btn btn-info">Ver venta</a></td>
-                                        <td class='text-center'><a href='sale.php?id=<?php echo $row['id'];?>' class='btn btn-success'>Generar entrega</a></td>
-                                    </tr>
-                                <?php } ?>
+                                    <?php
+                                    foreach ($conexion->query("SELECT * from delivery_order WHERE `idDeliveryMan` = ".$id.";") as $row){    
+                                        $valores = "SELECT * FROM `sales` INNER JOIN shopping_cart ON shopping_cart.id = sales.idShoppingCart INNER JOIN clients ON shopping_cart.idClient = clients.id WHERE sales.id = ".$row['idSale'].";";
+                                        $lector = mysqli_query($conexion, $valores);
+                                        $salesRow = mysqli_fetch_array($lector);
+                                       // SELECT * FROM `sales` INNER JOIN shopping_cart ON shopping_cart.id = sales.idShoppingCart INNER JOIN clients ON shopping_cart.idClient = clients.id
+                                    ?>	
+                                        <tr class="odd gradeX">
+                                            <td id="id"><?php echo $row['idSale']; ?></td>
+                                            <td><?php echo $row['date']; ?></td>
+                                            <td><?php echo $salesRow['total']?></td>
+                                            <td class="center"><?php echo $salesRow['address']; ?></td>
+                                            <td class="text-center"><a href='detail-history.php?id=<?php echo $row['id']; ?>' class="btn btn-info" id="idSale">Ver detalles</a></td>
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -200,9 +199,8 @@
 </body>
 
 </html>
-
 <?php } 
 else {
   echo "<script>window.history.pushState('', '', '../login.php');</script>";  
   echo "<script>location.reload();</script>"; 
-}?>
+}?> 
