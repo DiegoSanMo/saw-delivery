@@ -19,12 +19,19 @@
     $idSave = $_GET['idSave'];
     date_default_timezone_set('America/Monterrey');
     $date = date('Y-m-d', time());
+
+    foreach ($conexion->query('SELECT * from sales_details WHERE idSale = '.$idSave.';') as $row){
+      $consulta='UPDATE `products` SET `stock` = `stock` - '.$row['quantity'].' WHERE id = '.$row['idProduct'].';';
+      $resultados=mysqli_query($conexion,$consulta);
+    }
     
     $consulta="INSERT INTO `delivery_order` (`idSale`, `idDeliveryMan`, `date`) VALUES(".$idSave.",".$idUser.",'".$date."');";
     $resultados=mysqli_query($conexion,$consulta);
 
     $consulta="UPDATE `sales` SET `status` = 1 WHERE id = ".$idSave.";";
     $resultados=mysqli_query($conexion,$consulta);
+
+    
     echo "<script>window.history.pushState('', '', 'index.php');</script>";  
     echo "<script>location.reload();</script>"; 
 
